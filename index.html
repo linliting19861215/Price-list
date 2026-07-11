@@ -499,7 +499,18 @@ body::before{
         <a class="dropdown-item" data-series="Samsung A Series" onclick="navigateToSamsungSeries('Samsung A Series')">A Series</a>
     </div>
   </div>
-  <button class="brand-tab" data-brand="google" onclick="switchBrand('google')">Google</button>
+  <div class="brand-tab-wrapper" data-brand="google" id="googleTabWrapper">
+    <button class="brand-tab" data-brand="google">Google<span class="dropdown-arrow">&#9662;</span></button>
+    <div class="brand-dropdown" id="googleDropdown">
+        <a class="dropdown-item" data-series="Google Pixel 10 Series" onclick="navigateToGoogleSeries('Google Pixel 10 Series')">10 Series</a>
+        <a class="dropdown-item" data-series="Google Pixel 9 Series" onclick="navigateToGoogleSeries('Google Pixel 9 Series')">9 Series</a>
+        <a class="dropdown-item" data-series="Google Pixel 8 Series" onclick="navigateToGoogleSeries('Google Pixel 8 Series')">8 Series</a>
+        <a class="dropdown-item" data-series="Google Pixel 7 Series" onclick="navigateToGoogleSeries('Google Pixel 7 Series')">7 Series</a>
+        <a class="dropdown-item" data-series="Google Pixel 6 Series" onclick="navigateToGoogleSeries('Google Pixel 6 Series')">6 Series</a>
+        <a class="dropdown-item" data-series="Google Pixel Fold Series" onclick="navigateToGoogleSeries('Google Pixel Fold Series')">Fold Series</a>
+        <a class="dropdown-item" data-series="Google Pixel 5 Series" onclick="navigateToGoogleSeries('Google Pixel 5 Series')">Older</a>
+    </div>
+  </div>
   <button class="brand-tab" data-brand="xiaomi" onclick="switchBrand('xiaomi')">Xiaomi</button>
 </div>
 
@@ -3450,6 +3461,23 @@ function navigateToSamsungSeries(seriesName) {
   }
 }
 
+function navigateToGoogleSeries(seriesName) {
+  // Ensure Google brand is active
+  if (currentBrand !== 'google') {
+    switchBrand('google');
+  }
+  // Close dropdown
+  document.getElementById('googleDropdown').classList.remove('show');
+  // Find and scroll to target series
+  var sections = document.querySelectorAll('.brand-content[data-brand="google"] .series-section');
+  for (var i = 0; i < sections.length; i++) {
+    if (sections[i].dataset.series === seriesName) {
+      sections[i].scrollIntoView({behavior: 'smooth', block: 'start'});
+      break;
+    }
+  }
+}
+
 /* === Samsung Dropdown Menu === */
 (function() {
   var wrapper = document.getElementById('samsungTabWrapper');
@@ -3492,6 +3520,74 @@ function navigateToSamsungSeries(seriesName) {
     e.stopPropagation();
     if (currentBrand !== 'samsung') {
       switchBrand('samsung');
+    }
+    if (dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    } else {
+      openDropdown();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) {
+      dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    }
+  });
+
+  window.addEventListener('scroll', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  }, true);
+  window.addEventListener('resize', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  });
+})();
+
+/* === Google Dropdown Menu === */
+(function() {
+  var wrapper = document.getElementById('googleTabWrapper');
+  var dropdown = document.getElementById('googleDropdown');
+  var btn = wrapper.querySelector('.brand-tab');
+  var closeTimer = null;
+
+  function positionDropdown() {
+    var rect = btn.getBoundingClientRect();
+    dropdown.style.top = rect.bottom + 'px';
+    dropdown.style.left = rect.left + 'px';
+    var dropdownW = dropdown.offsetWidth || 170;
+    if (rect.left + dropdownW > window.innerWidth - 8) {
+      dropdown.style.left = (window.innerWidth - dropdownW - 8) + 'px';
+    }
+    if (rect.left < 8) {
+      dropdown.style.left = '8px';
+    }
+  }
+
+  function openDropdown() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    positionDropdown();
+    dropdown.classList.add('show');
+  }
+  function closeDropdown() {
+    closeTimer = setTimeout(function() {
+      dropdown.classList.remove('show');
+    }, 200);
+  }
+
+  wrapper.addEventListener('mouseenter', openDropdown);
+  wrapper.addEventListener('mouseleave', closeDropdown);
+  dropdown.addEventListener('mouseenter', function() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  });
+  dropdown.addEventListener('mouseleave', closeDropdown);
+
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (currentBrand !== 'google') {
+      switchBrand('google');
     }
     if (dropdown.classList.contains('show')) {
       dropdown.classList.remove('show');
