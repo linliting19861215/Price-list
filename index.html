@@ -224,9 +224,9 @@ body::before{
 .brand-tab-wrapper .brand-tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff;box-shadow:0 2px 8px rgba(59,130,246,0.35)}
 .brand-tab-wrapper .dropdown-arrow{font-size:0.65rem;margin-left:4px;display:inline-block;transition:transform .2s}
 .brand-dropdown{
-  display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  display:none;position:fixed;z-index:950;
   background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.12);
-  min-width:170px;z-index:910;padding:6px 0;margin-top:6px;
+  min-width:170px;padding:6px 0;
   border:1px solid #e8ecf1;
 }
 .brand-dropdown.show{display:block}
@@ -238,10 +238,6 @@ body::before{
 .dropdown-item:hover{background:#eff6ff;color:#2563eb}
 .dropdown-item:first-child{border-radius:8px 8px 0 0}
 .dropdown-item:last-child{border-radius:0 0 8px 8px}
-@media(max-width:768px){
-  .brand-dropdown{left:0;transform:none;min-width:150px}
-}
-
 /* Responsive */
 @media(max-width:768px){
   .card-grid{grid-template-columns:1fr;gap:10px}
@@ -3305,10 +3301,26 @@ document.addEventListener('keydown', function(e) {
 (function() {
   var wrapper = document.getElementById('iphoneTabWrapper');
   var dropdown = document.getElementById('iphoneDropdown');
+  var btn = wrapper.querySelector('.brand-tab');
   var closeTimer = null;
+
+  function positionDropdown() {
+    var rect = btn.getBoundingClientRect();
+    dropdown.style.top = rect.bottom + 'px';
+    dropdown.style.left = rect.left + 'px';
+    // Keep dropdown within viewport horizontally
+    var dropdownW = dropdown.offsetWidth || 170;
+    if (rect.left + dropdownW > window.innerWidth - 8) {
+      dropdown.style.left = (window.innerWidth - dropdownW - 8) + 'px';
+    }
+    if (rect.left < 8) {
+      dropdown.style.left = '8px';
+    }
+  }
 
   function openDropdown() {
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    positionDropdown();
     dropdown.classList.add('show');
   }
   function closeDropdown() {
@@ -3326,13 +3338,11 @@ document.addEventListener('keydown', function(e) {
   dropdown.addEventListener('mouseleave', closeDropdown);
 
   // Click toggle on iPhone button — all screen sizes
-  wrapper.querySelector('.brand-tab').addEventListener('click', function(e) {
+  btn.addEventListener('click', function(e) {
     e.stopPropagation();
-    // If not on iPhone brand, switch first, then expand
     if (currentBrand !== 'iphone') {
       switchBrand('iphone');
     }
-    // Toggle dropdown
     if (dropdown.classList.contains('show')) {
       dropdown.classList.remove('show');
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
@@ -3347,6 +3357,16 @@ document.addEventListener('keydown', function(e) {
       dropdown.classList.remove('show');
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     }
+  });
+
+  // Close dropdown on scroll or resize to prevent misalignment
+  window.addEventListener('scroll', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  }, true);
+  window.addEventListener('resize', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   });
 })();
 
