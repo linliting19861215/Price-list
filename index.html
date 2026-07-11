@@ -448,7 +448,7 @@ body::before{
 <div class="brand-nav-wrap">
 <div class="brand-nav" id="brandNav">
   <div class="brand-tab-wrapper" data-brand="iphone" id="iphoneTabWrapper">
-    <button class="brand-tab active" onclick="switchBrand('iphone')">iPhone<span class="dropdown-arrow">&#9662;</span></button>
+    <button class="brand-tab active">iPhone<span class="dropdown-arrow">&#9662;</span></button>
     <div class="brand-dropdown" id="iphoneDropdown">
         <a class="dropdown-item" data-series="iPhone 17 Series" onclick="navigateToSeries('iPhone 17 Series')">17 Series</a>
         <a class="dropdown-item" data-series="iPhone 16 Series" onclick="navigateToSeries('iPhone 16 Series')">16 Series</a>
@@ -3317,6 +3317,7 @@ document.addEventListener('keydown', function(e) {
     }, 200);
   }
 
+  // Hover: desktop — mouseenter/mouseleave (dual trigger with click)
   wrapper.addEventListener('mouseenter', openDropdown);
   wrapper.addEventListener('mouseleave', closeDropdown);
   dropdown.addEventListener('mouseenter', function() {
@@ -3324,22 +3325,27 @@ document.addEventListener('keydown', function(e) {
   });
   dropdown.addEventListener('mouseleave', closeDropdown);
 
-  // Mobile: click to toggle
+  // Click toggle on iPhone button — all screen sizes
   wrapper.querySelector('.brand-tab').addEventListener('click', function(e) {
-    if (window.innerWidth <= 768) {
-      if (dropdown.classList.contains('show')) {
-        dropdown.classList.remove('show');
-      } else {
-        openDropdown();
-        e.stopPropagation();
-      }
+    e.stopPropagation();
+    // If not on iPhone brand, switch first, then expand
+    if (currentBrand !== 'iphone') {
+      switchBrand('iphone');
+    }
+    // Toggle dropdown
+    if (dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    } else {
+      openDropdown();
     }
   });
 
-  // Click outside to close
+  // Click outside to close — all screen sizes
   document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && !wrapper.contains(e.target)) {
+    if (!wrapper.contains(e.target)) {
       dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     }
   });
 })();
