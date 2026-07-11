@@ -257,6 +257,37 @@ body::before{
   background:#3b82f6;border-color:#3b82f6;
   color:#fff;box-shadow:0 2px 8px rgba(59,130,246,0.35);
 }
+
+/* Series Sub Navigation */
+.series-sub-nav-wrap{
+  max-width:1400px;margin:0 auto;padding:8px 16px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;display:none;
+}
+.series-sub-nav-wrap::-webkit-scrollbar{display:none}
+.series-sub-nav-wrap.visible{display:block}
+.series-sub-nav{
+  display:flex;gap:6px;flex-wrap:nowrap;
+}
+.series-sub-tab{
+  flex-shrink:0;padding:5px 14px;
+  background:rgba(255,255,255,0.75);border:1px solid rgba(59,130,246,0.25);border-radius:16px;
+  color:#455a64;font-size:0.78rem;font-weight:500;
+  cursor:pointer;transition:all .2s;
+  white-space:nowrap;
+}
+.series-sub-tab:hover{
+  color:#1a237e;border-color:rgba(59,130,246,0.5);background:rgba(255,255,255,0.95);
+}
+.series-sub-tab.active{
+  background:#3b82f6;border-color:#3b82f6;
+  color:#fff;box-shadow:0 2px 8px rgba(59,130,246,0.35);
+}
+@media(max-width:768px){
+  .series-sub-nav-wrap{padding:6px 12px}
+  .series-sub-tab{padding:4px 12px;font-size:0.74rem}
+}
+
 .brand-content{display:none}
 .brand-content.active{display:block}
 .coming-soon{
@@ -430,6 +461,20 @@ body::before{
 
 <div class="container" id="cardContainer">
 <div class="brand-content active" data-brand="iphone">
+<div class="series-sub-nav-wrap visible" id="seriesSubNav">
+<div class="series-sub-nav">
+  <button class="series-sub-tab active" data-series="iPhone 17 Series" onclick="scrollToSeries('iPhone 17 Series',this)">17 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 16 Series" onclick="scrollToSeries('iPhone 16 Series',this)">16 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 15 Series" onclick="scrollToSeries('iPhone 15 Series',this)">15 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 14 Series" onclick="scrollToSeries('iPhone 14 Series',this)">14 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 13 Series" onclick="scrollToSeries('iPhone 13 Series',this)">13 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 12 Series" onclick="scrollToSeries('iPhone 12 Series',this)">12 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 11 Series" onclick="scrollToSeries('iPhone 11 Series',this)">11 Series</button>
+  <button class="series-sub-tab" data-series="iPhone X Series" onclick="scrollToSeries('iPhone X Series',this)">X Series</button>
+  <button class="series-sub-tab" data-series="iPhone 8 Series" onclick="scrollToSeries('iPhone 8 Series',this)">8 Series</button>
+  <button class="series-sub-tab" data-series="iPhone 7 Series" onclick="scrollToSeries('iPhone 7 Series',this)">7 Series</button>
+</div>
+</div>
 <div class="series-section" data-series="iPhone 17 Series">
 <h2 class="series-title">iPhone 17 Series</h2>
 <div class="card-grid">
@@ -3250,6 +3295,38 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+
+function scrollToSeries(seriesName, btn) {
+  // Update active state on all sub-tabs
+  document.querySelectorAll('.series-sub-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Find the target series-section
+  const sections = document.querySelectorAll('.series-section');
+  for (const s of sections) {
+    if (s.dataset.series === seriesName) {
+      s.scrollIntoView({behavior:'smooth',block:'start'});
+      break;
+    }
+  }
+}
+
+function updateSubNavActive() {
+  const subNav = document.getElementById('seriesSubNav');
+  if (!subNav || !subNav.classList.contains('visible')) return;
+  const sections = document.querySelectorAll('.brand-content.active .series-section');
+  let firstVisible = null;
+  sections.forEach(s => {
+    if (s.style.display !== 'none') {
+      if (!firstVisible) firstVisible = s;
+    }
+  });
+  if (firstVisible) {
+    document.querySelectorAll('.series-sub-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.series === firstVisible.dataset.series);
+    });
+  }
+}
+
 let currentBrand = 'iphone';
 
 function switchBrand(brand) {
@@ -3262,8 +3339,15 @@ function switchBrand(brand) {
   document.querySelectorAll('.brand-content').forEach(el => {
     el.classList.toggle('active', el.dataset.brand === brand);
   });
+  // Show/hide series sub-nav (only for iPhone)
+  const subNav = document.getElementById('seriesSubNav');
+  if (subNav) {
+    subNav.classList.toggle('visible', brand === 'iphone');
+  }
   // Re-apply search filter for the new brand
   filterCards();
+  // Update sub-nav active state
+  updateSubNavActive();
 }
 
 function filterCards() {
@@ -3285,6 +3369,8 @@ function filterCards() {
     });
     section.style.display = sectionVisible ? '' : 'none';
   });
+  // Update sub-nav active state based on first visible section
+  updateSubNavActive();
 }
 
 
