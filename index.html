@@ -388,6 +388,38 @@ body::before{
 }
 .photo-modal-header h2{font-size:1.05rem;color:#0f172a}
 .photo-modal-body{padding:20px}
+
+/* Image anti-theft protection */
+.overlay .modal-body img,
+.photo-modal-body img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.photo-modal-body .img-protect-wrap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 10px;
+  aspect-ratio: 1;
+  background: #f1f5f9;
+}
+.photo-modal-body .img-protect-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto;
+  background: transparent;
+}
+.photo-modal-body .img-protect-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 </style>
 
 <script type="application/ld+json">
@@ -458,7 +490,15 @@ body::before{
         <a class="dropdown-item" data-series="iPhone 7 Series" onclick="navigateToSeries('iPhone 7 Series')">7 Series</a>
     </div>
   </div>
-  <button class="brand-tab" data-brand="samsung" onclick="switchBrand('samsung')">Samsung</button>
+  <div class="brand-tab-wrapper" data-brand="samsung" id="samsungTabWrapper">
+    <button class="brand-tab" data-brand="samsung">Samsung<span class="dropdown-arrow">&#9662;</span></button>
+    <div class="brand-dropdown" id="samsungDropdown">
+        <a class="dropdown-item" data-series="Samsung S Series" onclick="navigateToSamsungSeries('Samsung S Series')">Ultra Series</a>
+        <a class="dropdown-item" data-series="Samsung Z Fold Series" onclick="navigateToSamsungSeries('Samsung Z Fold Series')">Fold Series</a>
+        <a class="dropdown-item" data-series="Samsung Z Flip Series" onclick="navigateToSamsungSeries('Samsung Z Flip Series')">Flip Series</a>
+        <a class="dropdown-item" data-series="Samsung A Series" onclick="navigateToSamsungSeries('Samsung A Series')">A Series</a>
+    </div>
+  </div>
   <button class="brand-tab" data-brand="google" onclick="switchBrand('google')">Google</button>
   <button class="brand-tab" data-brand="xiaomi" onclick="switchBrand('xiaomi')">Xiaomi</button>
 </div>
@@ -3103,7 +3143,7 @@ function openDetail(input) {
     ];
     mediaHTML += '<div class="media-section"><h3>Sample Photos</h3><div class="media-grid">';
     images.forEach(function(img) {
-      mediaHTML += '<div style="aspect-ratio:1;overflow:hidden;border-radius:10px;background:#f1f5f9;position:relative;">';
+      mediaHTML += '<div class="img-protect-wrap">';
       mediaHTML += '<img src="'+img.src+'" alt="'+img.label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+img.label+'</div></div>\'">';
       mediaHTML += '</div>';
     });
@@ -3205,7 +3245,7 @@ function openPhotoModal(card) {
     ];
     html += '<div class="media-grid">';
     images.forEach(function(img) {
-      html += '<div style="aspect-ratio:1;overflow:hidden;border-radius:10px;background:#f1f5f9;position:relative;">';
+      html += '<div class="img-protect-wrap">';
       html += '<img src="'+img.src+'" alt="'+img.label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+img.label+'</div></div>\'">';
       html += '</div>';
     });
@@ -3386,6 +3426,97 @@ document.querySelectorAll('.model-photo-btn').forEach(function(btn) {
     }
   });
 });
+
+
+function navigateToSamsungSeries(seriesName) {
+  // Ensure Samsung brand is active
+  if (currentBrand !== 'samsung') {
+    switchBrand('samsung');
+  }
+  // Close dropdown
+  document.getElementById('samsungDropdown').classList.remove('show');
+  // Handle A Series (no data)
+  if (seriesName === 'Samsung A Series') {
+    alert('Samsung A Series coming soon');
+    return;
+  }
+  // Find and scroll to target series
+  var sections = document.querySelectorAll('.brand-content[data-brand="samsung"] .series-section');
+  for (var i = 0; i < sections.length; i++) {
+    if (sections[i].dataset.series === seriesName) {
+      sections[i].scrollIntoView({behavior: 'smooth', block: 'start'});
+      break;
+    }
+  }
+}
+
+/* === Samsung Dropdown Menu === */
+(function() {
+  var wrapper = document.getElementById('samsungTabWrapper');
+  var dropdown = document.getElementById('samsungDropdown');
+  var btn = wrapper.querySelector('.brand-tab');
+  var closeTimer = null;
+
+  function positionDropdown() {
+    var rect = btn.getBoundingClientRect();
+    dropdown.style.top = rect.bottom + 'px';
+    dropdown.style.left = rect.left + 'px';
+    var dropdownW = dropdown.offsetWidth || 170;
+    if (rect.left + dropdownW > window.innerWidth - 8) {
+      dropdown.style.left = (window.innerWidth - dropdownW - 8) + 'px';
+    }
+    if (rect.left < 8) {
+      dropdown.style.left = '8px';
+    }
+  }
+
+  function openDropdown() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    positionDropdown();
+    dropdown.classList.add('show');
+  }
+  function closeDropdown() {
+    closeTimer = setTimeout(function() {
+      dropdown.classList.remove('show');
+    }, 200);
+  }
+
+  wrapper.addEventListener('mouseenter', openDropdown);
+  wrapper.addEventListener('mouseleave', closeDropdown);
+  dropdown.addEventListener('mouseenter', function() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  });
+  dropdown.addEventListener('mouseleave', closeDropdown);
+
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (currentBrand !== 'samsung') {
+      switchBrand('samsung');
+    }
+    if (dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    } else {
+      openDropdown();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) {
+      dropdown.classList.remove('show');
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    }
+  });
+
+  window.addEventListener('scroll', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  }, true);
+  window.addEventListener('resize', function() {
+    dropdown.classList.remove('show');
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  });
+})();
 
 </script>
 
