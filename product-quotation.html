@@ -82,6 +82,85 @@ body::before{
   position:absolute;left:14px;top:50%;transform:translateY(-50%);
   color:#5c6bc0;font-size:1rem;
 }
+/* ===== Promo Banner (Sticky Marquee) ===== */
+.promo-banner{
+  position:sticky;top:0;z-index:910;
+  background:linear-gradient(90deg,#1a1a2e 0%,#16213e 50%,#1a1a2e 100%);
+  overflow:hidden;padding:7px 0;
+  border-bottom:2px solid #f0c040;
+}
+.promo-banner .marquee-track{
+  display:flex;animation:marqueeScroll 28s linear infinite;
+  white-space:nowrap;width:max-content;
+}
+.promo-banner .marquee-item{
+  display:inline-flex;align-items:center;gap:6px;
+  color:#f0c040;font-size:0.82rem;font-weight:600;
+  padding:0 40px;letter-spacing:0.2px;
+}
+.promo-banner .marquee-item .sep{
+  color:#64748b;margin:0 8px;
+}
+@keyframes marqueeScroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+/* ===== Info Banner Row (Membership + Sourcing) ===== */
+.info-banner-row{
+  display:flex;gap:14px;
+  max-width:1400px;margin:0 auto;padding:14px 16px;
+}
+.info-card{
+  flex:1;border-radius:10px;padding:16px 18px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.07);
+  border:1px solid #e2e8f0;
+}
+.info-card h3{
+  font-size:0.95rem;font-weight:700;margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.info-card ul{
+  list-style:none;padding:0;margin:0 0 12px;font-size:0.8rem;color:#475569;
+}
+.info-card ul li{
+  padding:3px 0;display:flex;align-items:flex-start;gap:6px;
+}
+.info-card ul li::before{content:'✓';color:#10b981;font-weight:700;flex-shrink:0}
+.info-card .btn{
+  display:inline-block;padding:8px 20px;border-radius:6px;
+  font-size:0.8rem;font-weight:600;cursor:pointer;border:none;
+  text-decoration:none;transition:all .2s;
+}
+/* Membership Card */
+.info-card.membership{
+  background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);
+  color:#f1f5f9;border-color:#334155;
+}
+.info-card.membership h3{color:#f0c040}
+.info-card.membership ul{color:#cbd5e1}
+.info-card.membership ul li::before{color:#f0c040}
+.info-card.membership .btn{
+  background:linear-gradient(135deg,#f0c040,#d4a82a);
+  color:#1a1a2e;
+}
+.info-card.membership .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(240,192,64,0.4)}
+/* Sourcing Card */
+.info-card.sourcing{
+  background:#fff;border-left:4px solid #3b82f6;
+}
+.info-card.sourcing h3{color:#1e40af}
+.info-card.sourcing .btn{
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
+  color:#fff;
+}
+.info-card.sourcing .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(59,130,246,0.4)}
+
+@media(max-width:768px){
+  .info-banner-row{flex-direction:column;gap:10px;padding:10px 12px}
+  .promo-banner .marquee-item{font-size:0.72rem;padding:0 20px}
+}
+
 .container{
   max-width:1400px;margin:0 auto;padding:20px 16px 40px;
 }
@@ -452,6 +531,26 @@ body::before{
 </head>
 <body>
 
+<div class="promo-banner">
+  <div class="marquee-track">
+    <span class="marquee-item">Summer Sale! Extra 5% off on orders over $1000</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">Free global shipping on bulk orders</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">New arrivals daily — iPhone 7 to 17 series in stock</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">30-Day Warranty on all purchases</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">Summer Sale! Extra 5% off on orders over $1000</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">Free global shipping on bulk orders</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">New arrivals daily — iPhone 7 to 17 series in stock</span>
+    <span class="marquee-item sep">|</span>
+    <span class="marquee-item">30-Day Warranty on all purchases</span>
+  </div>
+</div>
+
 <div class="header">
   <div class="logo-area">
     <div class="logo-icon">ES</div>
@@ -470,6 +569,28 @@ body::before{
   <div class="search-wrap">
     <span class="search-icon">&#128269;</span>
     <input type="text" id="searchInput" placeholder="Search model, storage, series..." oninput="filterCards()">
+  </div>
+</div>
+
+<div class="info-banner-row">
+  <div class="info-card membership">
+    <h3>Membership Benefits</h3>
+    <ul>
+      <li>Watermark-free real product photos</li>
+      <li>5% discount on all orders</li>
+      <li>Priority shipping &amp; handling</li>
+    </ul>
+    <a class="btn" href="#contact" onclick="document.querySelector('.wechat-fab').click();return false;">Join Now</a>
+  </div>
+  <div class="info-card sourcing">
+    <h3>Sourcing &amp; Quality Control</h3>
+    <ul>
+      <li>Service fee: 3%-10% (varies by product category and order volume)</li>
+      <li>Translation Service (by appointment)</li>
+      <li>Quality Inspection (by appointment)</li>
+      <li>Packaging &amp; Consolidation (by appointment)</li>
+    </ul>
+    <a class="btn" href="#contact" onclick="document.querySelector('.wechat-fab').click();return false;">Book a Service</a>
   </div>
 </div>
 
