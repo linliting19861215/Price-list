@@ -6883,6 +6883,9 @@ document.addEventListener('keydown', function(e) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -6896,6 +6899,7 @@ document.addEventListener('keydown', function(e) {
 
   // Close dropdown on scroll or resize to prevent misalignment
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7021,6 +7025,9 @@ function navigateToGoogleSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7032,6 +7039,7 @@ function navigateToGoogleSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7089,6 +7097,9 @@ function navigateToGoogleSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7100,6 +7111,7 @@ function navigateToGoogleSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7172,6 +7184,9 @@ function navigateToXiaomiSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7183,6 +7198,7 @@ function navigateToXiaomiSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7254,6 +7270,9 @@ function navigateToRedmiSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7265,6 +7284,7 @@ function navigateToRedmiSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7336,6 +7356,9 @@ function navigateToOppoSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7347,6 +7370,7 @@ function navigateToOppoSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7418,6 +7442,9 @@ function navigateToIpadSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7429,6 +7456,7 @@ function navigateToIpadSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
@@ -7500,6 +7528,9 @@ function navigateToVivoSeries(seriesName) {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     } else {
       openDropdown();
+      // Prevent immediate scroll-close on mobile tap
+      dropdown.dataset.justOpened = '1';
+      setTimeout(function() { delete dropdown.dataset.justOpened; }, 300);
     }
   });
 
@@ -7511,6 +7542,7 @@ function navigateToVivoSeries(seriesName) {
   });
 
   window.addEventListener('scroll', function() {
+    if (dropdown.dataset.justOpened) return;
     dropdown.classList.remove('show');
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }, true);
