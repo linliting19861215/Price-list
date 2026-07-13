@@ -6737,47 +6737,281 @@ document.getElementById('cardContainer').addEventListener('click', function(e) {
   }
 });
 
-function openPhotoModal(card) {
-  document.getElementById('photoModalTitle').textContent = card.model + ' ' + card.storage + ' - Photos';
-  let html = '';
-  if (card.label === 'iPhone 14  Pro Max 256G') {
-    const images = [
-      {src:'images/iphone14pm-back.jpg', label:'背面全貌'},
-      {src:'images/iphone14pm-front.jpg', label:'正面亮屏'},
-      {src:'images/iphone14pm-side.jpg', label:'侧面展示'},
-      {src:'images/iphone14pm-about.jpg', label:'关于本机'},
-      {src:'images/iphone14pm-battery.jpg', label:'电池健康'},
-      {src:'images/iphone14pm-screenoff.jpg', label:'正面熄屏'}
-    ];
-    html += '<div class="media-grid">';
-    images.forEach(function(img) {
-      html += '<div class="img-protect-wrap">';
-      html += '<img src="'+img.src+'" alt="'+img.label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+img.label+'</div></div>\'">';
-      html += '</div>';
-    });
-    html += '</div>';
-  } else if (card.model.startsWith('iPhone')) {
-    html += '<div class="media-grid">';
-    html += '<div class="img-protect-wrap">';
-    html += '<img src="images/price-table.jpg" alt="价格表" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128196;</div><div class=label>价格表</div></div>\'">';
-    html += '</div>';
-    for(let i=1;i<=3;i++){
-      html += '<div class="media-placeholder"><div class="icon">📷</div><div class="label">样品照片 '+i+'</div></div>';
-    }
-    html += '</div>';
-    html += '<p style="text-align:center;color:#94a3b8;margin-top:16px;font-size:0.85rem;">More photos coming soon. Contact us for real product images.</p>';
-  } else {
-    html += '<div class="media-grid">';
-    for(let i=1;i<=4;i++){
-      html += '<div class="media-placeholder"><div class="icon">📷</div><div class="label">样品照片 '+i+'</div></div>';
-    }
-    html += '</div>';
-    html += '<p style="text-align:center;color:#94a3b8;margin-top:16px;font-size:0.85rem;">Photos coming soon. Contact us for real product images.</p>';
-  }
-  document.getElementById('photoModalBody').innerHTML = html;
-  document.getElementById('photoOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
+        function openPhotoModal(card) {
+            const modal = document.getElementById("photoModal");
+            const title = document.getElementById("photoModalTitle");
+            const count = document.getElementById("photoCountBadge");
+            const gallery = document.getElementById("photoGallery");
+
+            // Normalize model+storage for image lookup
+            const ns = (card.model + card.storage).toLowerCase().replace(/\s+/g, "");
+
+            let photos = [];
+            if (ns === "iphone12mini64g") {
+                photos = [
+                    { src: "images/iphone12mini-64g-1.jpg", alt: "iphone12mini-64g-1.jpg" },
+                    { src: "images/iphone12mini-64g-2.jpg", alt: "iphone12mini-64g-2.jpg" },
+                ];
+            } else if (ns === "iphone12promax128g") {
+                photos = [
+                    { src: "images/iphone12promax-128g-1.jpg", alt: "iphone12promax-128g-1.jpg" },
+                    { src: "images/iphone12promax-128g-2.jpg", alt: "iphone12promax-128g-2.jpg" },
+                    { src: "images/iphone12promax-128g-3.jpg", alt: "iphone12promax-128g-3.jpg" },
+                    { src: "images/iphone12promax-128g-4.jpg", alt: "iphone12promax-128g-4.jpg" },
+                    { src: "images/iphone12promax-128g-5.jpg", alt: "iphone12promax-128g-5.jpg" },
+                    { src: "images/iphone12promax-128g-6.jpg", alt: "iphone12promax-128g-6.jpg" },
+                ];
+            } else if (ns === "iphone12promax256g") {
+                photos = [
+                    { src: "images/iphone12promax-256g-1.jpg", alt: "iphone12promax-256g-1.jpg" },
+                    { src: "images/iphone12promax-256g-2.jpg", alt: "iphone12promax-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone12promax512g") {
+                photos = [
+                    { src: "images/iphone12promax-512g-1.jpg", alt: "iphone12promax-512g-1.jpg" },
+                    { src: "images/iphone12promax-512g-2.jpg", alt: "iphone12promax-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone13mini128g") {
+                photos = [
+                    { src: "images/iphone13mini-128g-1.jpg", alt: "iphone13mini-128g-1.jpg" },
+                    { src: "images/iphone13mini-128g-2.jpg", alt: "iphone13mini-128g-2.jpg" },
+                    { src: "images/iphone13mini-128g-3.jpg", alt: "iphone13mini-128g-3.jpg" },
+                    { src: "images/iphone13mini-128g-4.jpg", alt: "iphone13mini-128g-4.jpg" },
+                ];
+            } else if (ns === "iphone13mini256g") {
+                photos = [
+                    { src: "images/iphone13mini-256g-1.jpg", alt: "iphone13mini-256g-1.jpg" },
+                    { src: "images/iphone13mini-256g-2.jpg", alt: "iphone13mini-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone13mini512g") {
+                photos = [
+                    { src: "images/iphone13mini-512g-1.jpg", alt: "iphone13mini-512g-1.jpg" },
+                    { src: "images/iphone13mini-512g-2.jpg", alt: "iphone13mini-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone13pro128g") {
+                photos = [
+                    { src: "images/iphone13pro-128g-1.jpg", alt: "iphone13pro-128g-1.jpg" },
+                    { src: "images/iphone13pro-128g-2.jpg", alt: "iphone13pro-128g-2.jpg" },
+                ];
+            } else if (ns === "iphone13pro256g") {
+                photos = [
+                    { src: "images/iphone13pro-256g-1.jpg", alt: "iphone13pro-256g-1.jpg" },
+                    { src: "images/iphone13pro-256g-2.jpg", alt: "iphone13pro-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone13promax1tb") {
+                photos = [
+                    { src: "images/iphone13promax-1tb-1.jpg", alt: "iphone13promax-1tb-1.jpg" },
+                    { src: "images/iphone13promax-1tb-2.jpg", alt: "iphone13promax-1tb-2.jpg" },
+                ];
+            } else if (ns === "iphone14pro128g") {
+                photos = [
+                    { src: "images/iphone14pro-128g-1.jpg", alt: "iphone14pro-128g-1.jpg" },
+                    { src: "images/iphone14pro-128g-2.jpg", alt: "iphone14pro-128g-2.jpg" },
+                    { src: "images/iphone14pro-128g-3.jpg", alt: "iphone14pro-128g-3.jpg" },
+                    { src: "images/iphone14pro-128g-4.jpg", alt: "iphone14pro-128g-4.jpg" },
+                    { src: "images/iphone14pro-128g-5.jpg", alt: "iphone14pro-128g-5.jpg" },
+                    { src: "images/iphone14pro-128g-6.jpg", alt: "iphone14pro-128g-6.jpg" },
+                    { src: "images/iphone14pro-128g-7.jpg", alt: "iphone14pro-128g-7.jpg" },
+                    { src: "images/iphone14pro-128g-8.jpg", alt: "iphone14pro-128g-8.jpg" },
+                ];
+            } else if (ns === "iphone14pro1tb") {
+                photos = [
+                    { src: "images/iphone14pro-1tb-1.jpg", alt: "iphone14pro-1tb-1.jpg" },
+                    { src: "images/iphone14pro-1tb-2.jpg", alt: "iphone14pro-1tb-2.jpg" },
+                    { src: "images/iphone14pro-1tb-3.jpg", alt: "iphone14pro-1tb-3.jpg" },
+                    { src: "images/iphone14pro-1tb-4.jpg", alt: "iphone14pro-1tb-4.jpg" },
+                    { src: "images/iphone14pro-1tb-5.jpg", alt: "iphone14pro-1tb-5.jpg" },
+                    { src: "images/iphone14pro-1tb-6.jpg", alt: "iphone14pro-1tb-6.jpg" },
+                    { src: "images/iphone14pro-1tb-7.jpg", alt: "iphone14pro-1tb-7.jpg" },
+                    { src: "images/iphone14pro-1tb-8.jpg", alt: "iphone14pro-1tb-8.jpg" },
+                ];
+            } else if (ns === "iphone14pro256g") {
+                photos = [
+                    { src: "images/iphone14pro-256g-1.jpg", alt: "iphone14pro-256g-1.jpg" },
+                    { src: "images/iphone14pro-256g-2.jpg", alt: "iphone14pro-256g-2.jpg" },
+                    { src: "images/iphone14pro-256g-3.jpg", alt: "iphone14pro-256g-3.jpg" },
+                    { src: "images/iphone14pro-256g-4.jpg", alt: "iphone14pro-256g-4.jpg" },
+                    { src: "images/iphone14pro-256g-5.jpg", alt: "iphone14pro-256g-5.jpg" },
+                    { src: "images/iphone14pro-256g-6.jpg", alt: "iphone14pro-256g-6.jpg" },
+                ];
+            } else if (ns === "iphone14pro512g") {
+                photos = [
+                    { src: "images/iphone14pro-512g-1.jpg", alt: "iphone14pro-512g-1.jpg" },
+                    { src: "images/iphone14pro-512g-2.jpg", alt: "iphone14pro-512g-2.jpg" },
+                    { src: "images/iphone14pro-512g-3.jpg", alt: "iphone14pro-512g-3.jpg" },
+                    { src: "images/iphone14pro-512g-4.jpg", alt: "iphone14pro-512g-4.jpg" },
+                    { src: "images/iphone14pro-512g-5.jpg", alt: "iphone14pro-512g-5.jpg" },
+                    { src: "images/iphone14pro-512g-6.jpg", alt: "iphone14pro-512g-6.jpg" },
+                ];
+            } else if (ns === "iphone14promax1tb") {
+                photos = [
+                    { src: "images/iphone14promax-1tb-1.jpg", alt: "iphone14promax-1tb-1.jpg" },
+                    { src: "images/iphone14promax-1tb-2.jpg", alt: "iphone14promax-1tb-2.jpg" },
+                ];
+            } else if (ns === "iphone15plus128g") {
+                photos = [
+                    { src: "images/iphone15plus-128g-1.jpg", alt: "iphone15plus-128g-1.jpg" },
+                    { src: "images/iphone15plus-128g-2.jpg", alt: "iphone15plus-128g-2.jpg" },
+                ];
+            } else if (ns === "iphone15plus256g") {
+                photos = [
+                    { src: "images/iphone15plus-256g-1.jpg", alt: "iphone15plus-256g-1.jpg" },
+                    { src: "images/iphone15plus-256g-2.jpg", alt: "iphone15plus-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone15plus512g") {
+                photos = [
+                    { src: "images/iphone15plus-512g-1.jpg", alt: "iphone15plus-512g-1.jpg" },
+                    { src: "images/iphone15plus-512g-2.jpg", alt: "iphone15plus-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone15pro128g") {
+                photos = [
+                    { src: "images/iphone15pro-128g-1.jpg", alt: "iphone15pro-128g-1.jpg" },
+                    { src: "images/iphone15pro-128g-2.jpg", alt: "iphone15pro-128g-2.jpg" },
+                    { src: "images/iphone15pro-128g-3.jpg", alt: "iphone15pro-128g-3.jpg" },
+                    { src: "images/iphone15pro-128g-4.jpg", alt: "iphone15pro-128g-4.jpg" },
+                ];
+            } else if (ns === "iphone15pro1tb") {
+                photos = [
+                    { src: "images/iphone15pro-1tb-1.jpg", alt: "iphone15pro-1tb-1.jpg" },
+                    { src: "images/iphone15pro-1tb-2.jpg", alt: "iphone15pro-1tb-2.jpg" },
+                    { src: "images/iphone15pro-1tb-3.jpg", alt: "iphone15pro-1tb-3.jpg" },
+                    { src: "images/iphone15pro-1tb-4.jpg", alt: "iphone15pro-1tb-4.jpg" },
+                    { src: "images/iphone15pro-1tb-5.jpg", alt: "iphone15pro-1tb-5.jpg" },
+                    { src: "images/iphone15pro-1tb-6.jpg", alt: "iphone15pro-1tb-6.jpg" },
+                    { src: "images/iphone15pro-1tb-7.jpg", alt: "iphone15pro-1tb-7.jpg" },
+                    { src: "images/iphone15pro-1tb-8.jpg", alt: "iphone15pro-1tb-8.jpg" },
+                ];
+            } else if (ns === "iphone15pro256g") {
+                photos = [
+                    { src: "images/iphone15pro-256g-1.jpg", alt: "iphone15pro-256g-1.jpg" },
+                    { src: "images/iphone15pro-256g-2.jpg", alt: "iphone15pro-256g-2.jpg" },
+                    { src: "images/iphone15pro-256g-3.jpg", alt: "iphone15pro-256g-3.jpg" },
+                    { src: "images/iphone15pro-256g-4.jpg", alt: "iphone15pro-256g-4.jpg" },
+                ];
+            } else if (ns === "iphone15pro512g") {
+                photos = [
+                    { src: "images/iphone15pro-512g-1.jpg", alt: "iphone15pro-512g-1.jpg" },
+                    { src: "images/iphone15pro-512g-2.jpg", alt: "iphone15pro-512g-2.jpg" },
+                    { src: "images/iphone15pro-512g-3.jpg", alt: "iphone15pro-512g-3.jpg" },
+                    { src: "images/iphone15pro-512g-4.jpg", alt: "iphone15pro-512g-4.jpg" },
+                ];
+            } else if (ns === "iphone16e128g") {
+                photos = [
+                    { src: "images/iphone16e-128g-1.jpg", alt: "iphone16e-128g-1.jpg" },
+                    { src: "images/iphone16e-128g-2.jpg", alt: "iphone16e-128g-2.jpg" },
+                    { src: "images/iphone16e-128g-3.jpg", alt: "iphone16e-128g-3.jpg" },
+                    { src: "images/iphone16e-128g-4.jpg", alt: "iphone16e-128g-4.jpg" },
+                    { src: "images/iphone16e-128g-5.jpg", alt: "iphone16e-128g-5.jpg" },
+                    { src: "images/iphone16e-128g-6.jpg", alt: "iphone16e-128g-6.jpg" },
+                ];
+            } else if (ns === "iphone16e256g") {
+                photos = [
+                    { src: "images/iphone16e-256g-1.jpg", alt: "iphone16e-256g-1.jpg" },
+                    { src: "images/iphone16e-256g-2.jpg", alt: "iphone16e-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone16e512g") {
+                photos = [
+                    { src: "images/iphone16e-512g-1.jpg", alt: "iphone16e-512g-1.jpg" },
+                    { src: "images/iphone16e-512g-2.jpg", alt: "iphone16e-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone16promax1tb") {
+                photos = [
+                    { src: "images/iphone16promax-1tb-1.jpg", alt: "iphone16promax-1tb-1.jpg" },
+                    { src: "images/iphone16promax-1tb-2.jpg", alt: "iphone16promax-1tb-2.jpg" },
+                ];
+            } else if (ns === "iphone16promax256g") {
+                photos = [
+                    { src: "images/iphone16promax-256g-1.jpg", alt: "iphone16promax-256g-1.jpg" },
+                    { src: "images/iphone16promax-256g-2.jpg", alt: "iphone16promax-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone16promax512g") {
+                photos = [
+                    { src: "images/iphone16promax-512g-1.jpg", alt: "iphone16promax-512g-1.jpg" },
+                    { src: "images/iphone16promax-512g-2.jpg", alt: "iphone16promax-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone7plus32g") {
+                photos = [
+                    { src: "images/iphone7plus-32g-1.jpg", alt: "iphone7plus-32g-1.jpg" },
+                    { src: "images/iphone7plus-32g-2.jpg", alt: "iphone7plus-32g-2.jpg" },
+                ];
+            } else if (ns === "iphone8plus256g") {
+                photos = [
+                    { src: "images/iphone8plus-256g-1.jpg", alt: "iphone8plus-256g-1.jpg" },
+                    { src: "images/iphone8plus-256g-2.jpg", alt: "iphone8plus-256g-2.jpg" },
+                ];
+            } else if (ns === "iphone8plus64g") {
+                photos = [
+                    { src: "images/iphone8plus-64g-1.jpg", alt: "iphone8plus-64g-1.jpg" },
+                    { src: "images/iphone8plus-64g-2.jpg", alt: "iphone8plus-64g-2.jpg" },
+                ];
+            } else if (ns === "iphonex256g") {
+                photos = [
+                    { src: "images/iphonex-256g-1.jpg", alt: "iphonex-256g-1.jpg" },
+                    { src: "images/iphonex-256g-2.jpg", alt: "iphonex-256g-2.jpg" },
+                    { src: "images/iphonex-256g-3.jpg", alt: "iphonex-256g-3.jpg" },
+                    { src: "images/iphonex-256g-4.jpg", alt: "iphonex-256g-4.jpg" },
+                ];
+            } else if (ns === "iphonex64g") {
+                photos = [
+                    { src: "images/iphonex-64g-1.jpg", alt: "iphonex-64g-1.jpg" },
+                    { src: "images/iphonex-64g-2.jpg", alt: "iphonex-64g-2.jpg" },
+                    { src: "images/iphonex-64g-3.jpg", alt: "iphonex-64g-3.jpg" },
+                    { src: "images/iphonex-64g-4.jpg", alt: "iphonex-64g-4.jpg" },
+                ];
+            } else if (ns === "iphonexsmax256g") {
+                photos = [
+                    { src: "images/iphonexsmax-256g-1.jpg", alt: "iphonexsmax-256g-1.jpg" },
+                    { src: "images/iphonexsmax-256g-2.jpg", alt: "iphonexsmax-256g-2.jpg" },
+                ];
+            } else if (ns === "iphonexsmax512g") {
+                photos = [
+                    { src: "images/iphonexsmax-512g-1.jpg", alt: "iphonexsmax-512g-1.jpg" },
+                    { src: "images/iphonexsmax-512g-2.jpg", alt: "iphonexsmax-512g-2.jpg" },
+                    { src: "images/iphonexsmax-512g-3.jpg", alt: "iphonexsmax-512g-3.jpg" },
+                    { src: "images/iphonexsmax-512g-4.jpg", alt: "iphonexsmax-512g-4.jpg" },
+                ];
+            } else if (ns === "iphonexsmax64g") {
+                photos = [
+                    { src: "images/iphonexsmax-64g-1.jpg", alt: "iphonexsmax-64g-1.jpg" },
+                    { src: "images/iphonexsmax-64g-10.jpg", alt: "iphonexsmax-64g-10.jpg" },
+                    { src: "images/iphonexsmax-64g-2.jpg", alt: "iphonexsmax-64g-2.jpg" },
+                    { src: "images/iphonexsmax-64g-3.jpg", alt: "iphonexsmax-64g-3.jpg" },
+                    { src: "images/iphonexsmax-64g-4.jpg", alt: "iphonexsmax-64g-4.jpg" },
+                    { src: "images/iphonexsmax-64g-5.jpg", alt: "iphonexsmax-64g-5.jpg" },
+                    { src: "images/iphonexsmax-64g-6.jpg", alt: "iphonexsmax-64g-6.jpg" },
+                    { src: "images/iphonexsmax-64g-7.jpg", alt: "iphonexsmax-64g-7.jpg" },
+                    { src: "images/iphonexsmax-64g-8.jpg", alt: "iphonexsmax-64g-8.jpg" },
+                    { src: "images/iphonexsmax-64g-9.jpg", alt: "iphonexsmax-64g-9.jpg" },
+                ];
+            } else {
+                // No real photos available
+                photos = [{ src: "", alt: "" }];
+            }
+
+            // Update title
+            title.textContent = (card.model + " " + card.storage + " - Photos");
+
+            // Populate gallery
+            gallery.innerHTML = "";
+            if (photos.length === 0 || (photos.length === 1 && !photos[0].src)) {
+                count.textContent = "No photos";
+                gallery.innerHTML = '<div class="no-photos-placeholder"><p>No real photos available for this product yet.</p><p>Photos coming soon!</p></div>';
+            } else {
+                count.textContent = photos.length + " photos";
+                photos.forEach((photo, index) => {
+                    const img = document.createElement("img");
+                    img.src = photo.src;
+                    img.alt = photo.alt;
+                    img.loading = "lazy";
+                    img.onclick = function() { openLightbox(index); };
+                    gallery.appendChild(img);
+                });
+            }
+
+            // Show modal
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
 
 function closePhotoModal(e) {
   if(e && e.target !== document.getElementById('photoOverlay')) return;
