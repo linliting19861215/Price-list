@@ -8134,8 +8134,7 @@ document.getElementById('cardContainer').addEventListener('click', function(e) {
         function openPhotoModal(card) {
             const modal = document.getElementById("photoModal");
             const title = document.getElementById("photoModalTitle");
-            const count = document.getElementById("photoCountBadge");
-            const gallery = document.getElementById("photoGallery");
+            const gallery = document.getElementById("photoModalBody");
 
             // Normalize model+storage for image lookup
             const ns = (card.model + card.storage).toLowerCase().replace(/\s+/g, "");
@@ -8164,6 +8163,45 @@ document.getElementById('cardContainer').addEventListener('click', function(e) {
                 photos = [
                     { src: "images/iphone12promax-512g-1.jpg", alt: "iphone12promax-512g-1.jpg" },
                     { src: "images/iphone12promax-512g-2.jpg", alt: "iphone12promax-512g-2.jpg" },
+                ];
+            } else if (ns === "iphone1264g") {
+                photos = [
+                    { src: "images/iPhone12-09.jpg", alt: "iPhone12-09.jpg" },
+                    { src: "images/iPhone12-10.jpg", alt: "iPhone12-10.jpg" },
+                    { src: "images/iPhone12-11.jpg", alt: "iPhone12-11.jpg" },
+                    { src: "images/iPhone12-12.jpg", alt: "iPhone12-12.jpg" },
+                    { src: "images/iPhone12-13.jpg", alt: "iPhone12-13.jpg" },
+                    { src: "images/iPhone12-14.jpg", alt: "iPhone12-14.jpg" },
+                    { src: "images/iPhone12-15.jpg", alt: "iPhone12-15.jpg" },
+                    { src: "images/iPhone12-16.jpg", alt: "iPhone12-16.jpg" },
+                    { src: "images/iPhone12-17.jpg", alt: "iPhone12-17.jpg" },
+                    { src: "images/iPhone12-18.jpg", alt: "iPhone12-18.jpg" },
+                ];
+            } else if (ns === "iphone12128g") {
+                photos = [
+                    { src: "images/iPhone12-09.jpg", alt: "iPhone12-09.jpg" },
+                    { src: "images/iPhone12-10.jpg", alt: "iPhone12-10.jpg" },
+                    { src: "images/iPhone12-11.jpg", alt: "iPhone12-11.jpg" },
+                    { src: "images/iPhone12-12.jpg", alt: "iPhone12-12.jpg" },
+                    { src: "images/iPhone12-13.jpg", alt: "iPhone12-13.jpg" },
+                    { src: "images/iPhone12-14.jpg", alt: "iPhone12-14.jpg" },
+                    { src: "images/iPhone12-15.jpg", alt: "iPhone12-15.jpg" },
+                    { src: "images/iPhone12-16.jpg", alt: "iPhone12-16.jpg" },
+                    { src: "images/iPhone12-17.jpg", alt: "iPhone12-17.jpg" },
+                    { src: "images/iPhone12-18.jpg", alt: "iPhone12-18.jpg" },
+                ];
+            } else if (ns === "iphone12256g") {
+                photos = [
+                    { src: "images/iPhone12-09.jpg", alt: "iPhone12-09.jpg" },
+                    { src: "images/iPhone12-10.jpg", alt: "iPhone12-10.jpg" },
+                    { src: "images/iPhone12-11.jpg", alt: "iPhone12-11.jpg" },
+                    { src: "images/iPhone12-12.jpg", alt: "iPhone12-12.jpg" },
+                    { src: "images/iPhone12-13.jpg", alt: "iPhone12-13.jpg" },
+                    { src: "images/iPhone12-14.jpg", alt: "iPhone12-14.jpg" },
+                    { src: "images/iPhone12-15.jpg", alt: "iPhone12-15.jpg" },
+                    { src: "images/iPhone12-16.jpg", alt: "iPhone12-16.jpg" },
+                    { src: "images/iPhone12-17.jpg", alt: "iPhone12-17.jpg" },
+                    { src: "images/iPhone12-18.jpg", alt: "iPhone12-18.jpg" },
                 ];
             } else if (ns === "iphone11promax256g") {
                 photos = [
@@ -8389,15 +8427,13 @@ document.getElementById('cardContainer').addEventListener('click', function(e) {
             }
 
             // Update title
-            title.textContent = (card.model + " " + card.storage + " - Photos");
+            title.textContent = (card.model + " " + card.storage + " - Photos (" + photos.length + " photos)");
 
             // Populate gallery
             gallery.innerHTML = "";
             if (photos.length === 0 || (photos.length === 1 && !photos[0].src)) {
-                count.textContent = "No photos";
                 gallery.innerHTML = '<div class="no-photos-placeholder"><p>No real photos available for this product yet.</p><p>Photos coming soon!</p></div>';
             } else {
-                count.textContent = photos.length + " photos";
                 photos.forEach((photo, index) => {
                     const img = document.createElement("img");
                     img.src = photo.src;
@@ -8409,7 +8445,7 @@ document.getElementById('cardContainer').addEventListener('click', function(e) {
             }
 
             // Show modal
-            modal.style.display = "flex";
+            document.getElementById("photoOverlay").classList.add("active");
             document.body.style.overflow = "hidden";
         }
 
