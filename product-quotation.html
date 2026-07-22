@@ -8419,7 +8419,7 @@ function openDetail(input) {
     for(let i=1;i<=maxImg;i++){
       const label = "Photo "+i;
       mediaHTML += '<div class="img-protect-wrap">';
-      mediaHTML += '<img src="'+imgPrefix+i+'.jpg" alt="'+label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="openLightbox(this.src)" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+label+'</div></div>\'">';
+      mediaHTML += '<img src="'+imgPrefix+String(i).padStart(2,'0')+'.jpg" alt="'+label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="openLightbox(this.src)" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+label+'</div></div>\'">';
       mediaHTML += '</div>';
     }
     mediaHTML += '</div></div>';
@@ -8448,7 +8448,7 @@ function openDetail(input) {
     for(let i=1;i<=9;i++){
       const label = "实拍照片 "+i;
       mediaHTML += '<div class="img-protect-wrap">';
-      mediaHTML += '<img src="'+imgPrefix+i+'.jpg" alt="'+label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="openLightbox(this.src)" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+label+'</div></div>\'">';
+      mediaHTML += '<img src="'+imgPrefix+String(i).padStart(2,'0')+'.jpg" alt="'+label+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer" onclick="openLightbox(this.src)" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=media-placeholder style=aspect-ratio:1><div class=icon>&#128247;</div><div class=label>'+label+'</div></div>\'">';
       mediaHTML += '</div>';
     }
     mediaHTML += '</div></div>';
